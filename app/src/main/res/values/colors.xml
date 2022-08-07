@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="default_note_color">#EFE4B1</color>
+    <color name="green_note_color">#C3E6AF</color>
+    <color name="blue_note_color">#AFE6D6</color>
+    <color name="pink_note_color">#DAAFE6</color>
+    <color name="red_note_color">#E6AFBA</color>
+</resources>
