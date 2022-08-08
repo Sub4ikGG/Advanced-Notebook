@@ -18,7 +18,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainAdapter: RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
     @Inject
     lateinit var context: Context
 
@@ -27,7 +27,7 @@ class MainAdapter: RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     private var notes = ArrayList<Note>()
 
-    inner class MainViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class MainViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnLongClickListener {
         private val binding = TextNoteLayoutBinding.bind(view)
 
         fun bind(note: Note, context: Context) {
@@ -43,7 +43,7 @@ class MainAdapter: RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
             note.font?.let { setupFont(it) }
             note.topColor?.let { setupColor(it, context) }
 
-            setupClickListeners(note)
+            binding.topBarNote.setOnLongClickListener(this)
         }
 
         private fun setupFont(font: String) {
@@ -58,16 +58,9 @@ class MainAdapter: RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
             binding.topBarNote.setCardBackgroundColor(color)
         }
 
-        @SuppressLint("NotifyDataSetChanged")
-        private fun setupClickListeners(note: Note) {
-            binding.topBarNote.setOnLongClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    repository.deleteNote(note)
-                    notes.remove(note)
-                    CoroutineScope(Dispatchers.Main).launch { notifyItemRemoved(adapterPosition) }
-                }
-                true
-            }
+        override fun onLongClick(p0: View?): Boolean {
+            onNoteClickListener.onNoteClick(adapterPosition)
+            return true
         }
     }
 
@@ -84,9 +77,15 @@ class MainAdapter: RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
         return notes.count()
     }
 
-    private fun deleteItem(note: Note) {
+    fun getItems(): ArrayList<Note> = notes
+
+    fun deleteItem(note: Note, adapterPosition: Int) {
         notes.remove(note)
-        notifyDataSetChanged()
+        notifyItemRemoved(adapterPosition)
+    }
+
+    interface OnNoteClickListener {
+        fun onNoteClick(position: Int)
     }
 
     @SuppressLint("NotifyDataSetChanged")

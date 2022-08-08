@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,16 +18,20 @@ import com.efremov.advancednotebook.databinding.FragmentMainBinding
 import com.efremov.advancednotebook.di.App
 import com.efremov.advancednotebook.recyclerview.MainAdapter
 import com.efremov.advancednotebook.viewmodel.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
  * Use the [MainFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), MainAdapter.OnNoteClickListener {
 
     private var _binding: FragmentMainBinding? = null
-    private var adapter = MainAdapter()
+    private var adapter = MainAdapter(this)
     private val mainViewModel: MainViewModel by viewModels()
 
     private val binding get() = _binding!!
@@ -41,7 +46,7 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainBinding.inflate(layoutInflater)
 
         setupRecyclerView()
@@ -72,5 +77,15 @@ class MainFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = MainFragment()
+    }
+
+    override fun onNoteClick(position: Int) {
+        val note = adapter.getItems()[position]
+        adapter.deleteItem(note, position)
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(400) // If not write delay(400+) then animation of deleting item will be broken
+            mainViewModel.deleteNote(note)
+        }
+        Toast.makeText(context, note.title, Toast.LENGTH_SHORT).show()
     }
 }

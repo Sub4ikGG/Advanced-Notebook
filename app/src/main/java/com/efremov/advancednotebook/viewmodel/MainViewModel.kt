@@ -20,4 +20,8 @@ class MainViewModel: ViewModel() {
             println(e.message)
         }
     }
+
+    suspend fun deleteNote(note: Note) {
+        repository.deleteNote(note)
+    }
 }
