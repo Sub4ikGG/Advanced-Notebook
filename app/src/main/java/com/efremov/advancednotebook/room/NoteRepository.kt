@@ -10,7 +10,7 @@ class NoteRepository(private val noteDao: NoteDao) {
         return noteDao.insertNote(note)
     }
 
-    fun getNotes(): LiveData<List<Note>> {
+    fun getNotes(): List<Note> {
         return noteDao.getAllNotes()
     }
 

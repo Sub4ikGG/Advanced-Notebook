@@ -12,7 +12,9 @@ import com.efremov.advancednotebook.R
 import com.efremov.advancednotebook.data.Note
 import com.efremov.advancednotebook.databinding.TextNoteLayoutBinding
 import com.efremov.advancednotebook.room.NoteRepository
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
     @Inject
@@ -36,7 +38,7 @@ class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Ad
             note.font?.let { setupFont(it) }
             note.topColor?.let { setupColor(it, context) }
 
-            binding.topBarNote.setOnLongClickListener(this)
+            //binding.topBarNote.setOnLongClickListener(this)
             binding.noteContentLayout.setOnClickListener(this)
         }
 
@@ -53,7 +55,7 @@ class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Ad
         }
 
         override fun onLongClick(p0: View?): Boolean {
-            onNoteClickListener.onNoteLongClick(adapterPosition)
+            //onNoteClickListener.onNoteLongClick(adapterPosition)
             return true
         }
 
@@ -101,5 +103,10 @@ class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Ad
     fun put(array: ArrayList<Note>) {
         notes = array
         notifyDataSetChanged()
+    }
+
+    fun swapItems(fromPos: Int, toPos: Int) {
+        Collections.swap(notes, fromPos, toPos)
+        notifyItemMoved(fromPos, toPos)
     }
 }

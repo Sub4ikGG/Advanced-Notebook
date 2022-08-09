@@ -11,7 +11,7 @@ interface NoteDao {
     suspend fun insertNote(note: Note)
 
     @Query("SELECT * FROM note_table")
-    fun getAllNotes(): LiveData<List<Note>>
+    fun getAllNotes(): List<Note>
 
     @Delete
     suspend fun deleteNote(note: Note)
