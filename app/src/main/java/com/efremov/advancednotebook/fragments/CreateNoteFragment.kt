@@ -175,7 +175,7 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
         binding.qaFab.setOnClickListener {
             binding.qaFab.press {
-                Snackbar.make(requireView(), R.string.help, Snackbar.LENGTH_SHORT)
+                Snackbar.make(requireView(), R.string.preview_help, Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             }
         }
