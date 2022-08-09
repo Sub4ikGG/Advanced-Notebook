@@ -206,7 +206,7 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         binding.reminderImageView.setOnClickListener {
             binding.reminderCardView.press {
                 remind = Remind(-1, -1, -1, -1, -1)
-                binding.reminderCardView.visibility = View.INVISIBLE
+                binding.reminderCardView.visibility = View.GONE
                 Snackbar.make(requireView(), R.string.reminder_deleted, Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             }
@@ -353,8 +353,8 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             }
         }
 
-        Snackbar.make(requireView(), R.string.reminder_created, Snackbar.LENGTH_SHORT)
-            .setAction("Action", null).show()
+        /*Snackbar.make(requireView(), R.string.reminder_created, Snackbar.LENGTH_SHORT)
+            .setAction("Action", null).show()*/
     }
 
     companion object {

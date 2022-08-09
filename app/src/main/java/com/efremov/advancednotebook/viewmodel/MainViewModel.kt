@@ -24,4 +24,8 @@ class MainViewModel: ViewModel() {
     suspend fun deleteNote(note: Note) {
         repository.deleteNote(note)
     }
+
+    suspend fun updateNote(note: Note) {
+        repository.updateNote(note)
+    }
 }

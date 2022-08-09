@@ -12,22 +12,15 @@ import com.efremov.advancednotebook.R
 import com.efremov.advancednotebook.data.Note
 import com.efremov.advancednotebook.databinding.TextNoteLayoutBinding
 import com.efremov.advancednotebook.room.NoteRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
     @Inject
     lateinit var context: Context
 
-    @Inject
-    lateinit var repository: NoteRepository
-
     private var notes = ArrayList<Note>()
 
-    inner class MainViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnLongClickListener {
+    inner class MainViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnLongClickListener, View.OnClickListener {
         private val binding = TextNoteLayoutBinding.bind(view)
 
         fun bind(note: Note, context: Context) {
@@ -44,6 +37,7 @@ class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Ad
             note.topColor?.let { setupColor(it, context) }
 
             binding.topBarNote.setOnLongClickListener(this)
+            binding.noteContentLayout.setOnClickListener(this)
         }
 
         private fun setupFont(font: String) {
@@ -59,8 +53,12 @@ class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Ad
         }
 
         override fun onLongClick(p0: View?): Boolean {
-            onNoteClickListener.onNoteClick(adapterPosition)
+            onNoteClickListener.onNoteLongClick(adapterPosition)
             return true
+        }
+
+        override fun onClick(p0: View?) {
+            onNoteClickListener.onNoteClick(adapterPosition)
         }
     }
 
@@ -84,7 +82,18 @@ class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Ad
         notifyItemRemoved(adapterPosition)
     }
 
+    fun changeItem(note: Note) {
+        for(i in 0 until itemCount) {
+            if(notes[i].id == note.id) {
+                notes[i] = note
+                notifyItemChanged(i)
+                break
+            }
+        }
+    }
+
     interface OnNoteClickListener {
+        fun onNoteLongClick(position: Int)
         fun onNoteClick(position: Int)
     }
 
