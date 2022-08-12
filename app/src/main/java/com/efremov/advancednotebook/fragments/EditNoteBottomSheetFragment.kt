@@ -2,6 +2,7 @@ package com.efremov.advancednotebook.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Bundle
@@ -11,13 +12,26 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.efremov.advancednotebook.data.Note
 import com.efremov.advancednotebook.databinding.EditNoteBottomSheetBinding
+import com.efremov.advancednotebook.di.App
+import com.efremov.advancednotebook.showAlertDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import javax.inject.Inject
 
-class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener): BottomSheetDialogFragment() {
+class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener) :
+    BottomSheetDialogFragment() {
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     private var _binding: EditNoteBottomSheetBinding? = null
 
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        (requireActivity().applicationContext as App).appComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +46,7 @@ class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener): B
             binding.titleEditNote.setText(it.title)
             binding.textEditNote.setText(it.text)
 
-            when(it.time) {
+            when (it.time) {
                 "0" -> binding.timeNote.text = ""
                 "-1" -> binding.timeNote.visibility = View.GONE
                 else -> binding.timeNote.text = note.time
@@ -53,7 +67,7 @@ class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener): B
                 val title = binding.titleEditNote.text.toString()
                 val text = binding.textEditNote.text.toString()
 
-                if(title.isNotEmpty() && text.isNotEmpty() && (title != note.title || text != note.text)) {
+                if (title.isNotEmpty() && text.isNotEmpty() && (title != note.title || text != note.text)) {
                     note.title = binding.titleEditNote.text.toString()
                     note.text = binding.textEditNote.text.toString()
 
@@ -74,8 +88,21 @@ class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener): B
 
         binding.deleteFab.setOnClickListener {
             binding.deleteFab.press {
-                onFabEventListener.onNoteDeleted(note)
-                dismiss()
+                if(sharedPreferences.getBoolean(CONFIRM_ARG, false))
+                    showAlertDialog(
+                        requireContext(),
+                        "Delete note",
+                        "Are you sure?",
+                        "Yes",
+                        "No",
+                        positivePress = {
+                            onFabEventListener.onNoteDeleted(note)
+                            dismiss()
+                        })
+                else {
+                    onFabEventListener.onNoteDeleted(note)
+                    dismiss()
+                }
             }
         }
 
@@ -104,7 +131,7 @@ class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener): B
 
         binding.shareNoteFab.setOnClickListener {
             binding.shareNoteFab.press {
-                if(binding.titleEditNote.text.isNotEmpty() && binding.textEditNote.text.isNotEmpty()) {
+                if (binding.titleEditNote.text.isNotEmpty() && binding.textEditNote.text.isNotEmpty()) {
                     val title = binding.titleEditNote.text.toString()
                     val content = binding.textEditNote.text.toString()
                     val date = binding.timeNote.text.toString()
@@ -156,11 +183,13 @@ class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener): B
     private fun changeFabColor(c: Int) {
         val color = ContextCompat.getColor(requireContext(), c)
         binding.topBarNote.setCardBackgroundColor(color)
-        binding.createFab.backgroundTintList = ColorStateList.valueOf(color)
-        binding.deleteFab.backgroundTintList = ColorStateList.valueOf(color)
-        binding.setReminderFab.backgroundTintList = ColorStateList.valueOf(color)
-        binding.removeDateFab.backgroundTintList = ColorStateList.valueOf(color)
-        binding.shareNoteFab.backgroundTintList = ColorStateList.valueOf(color)
+        if (sharedPreferences.getBoolean(PAINT_ARG, false)) {
+            binding.createFab.backgroundTintList = ColorStateList.valueOf(color)
+            binding.deleteFab.backgroundTintList = ColorStateList.valueOf(color)
+            binding.setReminderFab.backgroundTintList = ColorStateList.valueOf(color)
+            binding.removeDateFab.backgroundTintList = ColorStateList.valueOf(color)
+            binding.shareNoteFab.backgroundTintList = ColorStateList.valueOf(color)
+        }
     }
 
     private fun setupFont(font: String) {

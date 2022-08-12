@@ -2,7 +2,9 @@ package com.efremov.advancednotebook.fragments
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Bundle
@@ -19,9 +21,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.efremov.advancednotebook.R
 import com.efremov.advancednotebook.data.Note
 import com.efremov.advancednotebook.data.Remind
+import com.efremov.advancednotebook.data.noteColors
+import com.efremov.advancednotebook.data.noteFonts
 import com.efremov.advancednotebook.databinding.FragmentCreateNoteBinding
 import com.efremov.advancednotebook.di.App
 import com.efremov.advancednotebook.room.NoteRepository
+import com.efremov.advancednotebook.showSnackbarMessage
 import com.efremov.advancednotebook.viewpager2.ColorAdapter
 import com.efremov.advancednotebook.viewpager2.FontAdapter
 import com.google.android.material.snackbar.Snackbar
@@ -48,27 +53,13 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     @Inject
     lateinit var repository: NoteRepository
 
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
     private val scope = CoroutineScope(Dispatchers.IO + CoroutineName("CreateNoteFragment-scope"))
-    private var colors = listOf(
-        R.color.default_note_color,
-        R.color.green_note_color,
-        R.color.blue_note_color,
-        R.color.pink_note_color,
-        R.color.red_note_color
-    )
-    private var fonts = listOf(
-        "sans-serif",
-        "sans-serif-light",
-        "sans-serif-thin",
-        "monospace",
-        "cursive",
-        "sans-serif-smallcaps",
-        "serif",
-        //"casual",
-        //"serif-monospace"
-    )
-    private var currentColor = colors[0]
-    private var currentFont = fonts[0]
+
+    private var currentColor = noteColors[0]
+    private var currentFont = noteFonts[0]
 
     private var remind = Remind(-1, -1, -1, -1, -1)
     private var scaled: Boolean = false
@@ -93,18 +84,24 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         setupClickListeners()
 
         colorAdapter = ColorAdapter(requireActivity()); fontAdapter = FontAdapter(requireActivity())
-        colorAdapter.put(colors); fontAdapter.put(fonts)
+        colorAdapter.put(noteColors); fontAdapter.put(noteFonts)
 
         binding.timeNote.text = getDateByTimestamp(System.currentTimeMillis() / 1000L)
 
         colorViewPager = binding.topColorViewPager; fontViewPager = binding.fontViewPager
         colorViewPager.adapter = colorAdapter; fontViewPager.adapter = fontAdapter
 
+        val baseColor = sharedPreferences.getInt(BASE_COLOR_ARG, R.color.default_note_color)
+        val baseFont = sharedPreferences.getString(BASE_FONT_ARG, "sans-serif")
+
+        colorViewPager.currentItem = noteColors.indexOf(baseColor)
+        fontViewPager.currentItem = noteFonts.indexOf(baseFont)
+
         scope.launch {
             while (!this@CreateNoteFragment.isVisible) delay(500)
             while (this@CreateNoteFragment.isVisible) {
-                if (colors[colorViewPager.currentItem] != currentColor) {
-                    currentColor = colors[colorViewPager.currentItem]
+                if (noteColors[colorViewPager.currentItem] != currentColor) {
+                    currentColor = noteColors[colorViewPager.currentItem]
                     launch(Dispatchers.Main) {
                         changePreviewFabColor()
 
@@ -122,8 +119,8 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                             }
                         }
                     }
-                } else if (fonts[fontViewPager.currentItem] != currentFont) {
-                    currentFont = fonts[fontViewPager.currentItem]
+                } else if (noteFonts[fontViewPager.currentItem] != currentFont) {
+                    currentFont = noteFonts[fontViewPager.currentItem]
                     launch(Dispatchers.Main) {
                         changePreviewFont()
 
@@ -149,8 +146,14 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     private fun setupClickListeners() {
         binding.createFab.setOnClickListener {
             binding.createFab.press {
-                if (binding.titleNote.text.isEmpty()) showMessage("Error: note title is empty.")
-                else if (binding.textNote.text.isEmpty()) showMessage("Error: note content is empty.")
+                if (binding.titleNote.text.isEmpty()) showSnackbarMessage(
+                    requireView(),
+                    "Error: note title is empty."
+                )
+                else if (binding.textNote.text.isEmpty()) showSnackbarMessage(
+                    requireView(),
+                    "Error: note content is empty."
+                )
                 else {
 
                     val note = prepareNote(
@@ -162,11 +165,11 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
                     try {
                         scope.launch { repository.insertNote(note) }
-                        showMessage("Successfully create note.")
+                        showSnackbarMessage(requireView(), "Successfully create note.")
                         findNavController().popBackStack()
                     } catch (e: Exception) {
                         Log.d("Try-catch tracker", "${e.message}")
-                        showMessage("Error: can`t create note.")
+                        showSnackbarMessage(requireView(), "Error: can`t create note.")
                     }
 
                 }
@@ -214,8 +217,14 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
         binding.shareNoteFab.setOnClickListener {
             binding.shareNoteFab.press {
-                if (binding.titleNote.text.isEmpty()) showMessage("Error: note title is empty.")
-                else if (binding.textNote.text.isEmpty()) showMessage("Error: note content is empty.")
+                if (binding.titleNote.text.isEmpty()) showSnackbarMessage(
+                    requireView(),
+                    "Error: note title is empty."
+                )
+                else if (binding.textNote.text.isEmpty()) showSnackbarMessage(
+                    requireView(),
+                    "Error: note content is empty."
+                )
                 else {
                     val title = binding.titleNote.text.toString()
                     val content = binding.textNote.text.toString()
@@ -280,18 +289,22 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         binding.titleNote.typeface = typeface
         binding.textNote.typeface = typeface
         binding.timeNote.typeface = typeface
-        binding.reminderTextView.typeface = typeface
+        if (sharedPreferences.getBoolean(PAINT_ARG, false))
+            binding.reminderTextView.typeface = typeface
     }
 
     private fun changePreviewFabColor() {
         val color = ContextCompat.getColor(requireContext(), currentColor)
         binding.topBarNote.setCardBackgroundColor(color)
-        binding.createFab.backgroundTintList = ColorStateList.valueOf(color)
-        binding.qaFab.backgroundTintList = ColorStateList.valueOf(color)
-        binding.setReminderFab.backgroundTintList = ColorStateList.valueOf(color)
-        binding.removeDateFab.backgroundTintList = ColorStateList.valueOf(color)
-        binding.shareNoteFab.backgroundTintList = ColorStateList.valueOf(color)
-        binding.reminderImageView.backgroundTintList = ColorStateList.valueOf(color)
+
+        if (sharedPreferences.getBoolean(PAINT_ARG, false)) {
+            binding.createFab.backgroundTintList = ColorStateList.valueOf(color)
+            binding.qaFab.backgroundTintList = ColorStateList.valueOf(color)
+            binding.setReminderFab.backgroundTintList = ColorStateList.valueOf(color)
+            binding.removeDateFab.backgroundTintList = ColorStateList.valueOf(color)
+            binding.shareNoteFab.backgroundTintList = ColorStateList.valueOf(color)
+            binding.reminderImageView.backgroundTintList = ColorStateList.valueOf(color)
+        }
     }
 
     private fun View.press(qux: () -> Unit) {
@@ -307,11 +320,6 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                 scaleY(1f)
             }
         }
-    }
-
-    private fun showMessage(message: String) {
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT)
-            .setAction("Action", null).show()
     }
 
     override fun onDateSet(p0: DatePicker?, year: Int, month: Int, dath: Int) {
@@ -352,9 +360,6 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                 translationX(1f)
             }
         }
-
-        /*Snackbar.make(requireView(), R.string.reminder_created, Snackbar.LENGTH_SHORT)
-            .setAction("Action", null).show()*/
     }
 
     companion object {

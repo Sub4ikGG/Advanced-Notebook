@@ -1,6 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SettingsFragment"/>
+    android:padding="8dp"
+    tools:context=".fragments.SettingsFragment">
+
+    <TextView
+        android:id="@+id/long_click_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:fontFamily="sans-serif-thin"
+        android:text="@string/long_click_on_button_to_show_what_is_it"
+        android:textColor="#4D000000" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/general_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/general_label"
+            android:textAlignment="center"
+            android:textColor="#4D000000" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/change_note_layout_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:contentDescription="Change note layout"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_baseline_grid_view_24"
+                app:backgroundTint="#EFE4B1"
+                app:rippleColor="@null" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/turn_confirm_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:contentDescription="Turn agreement"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_baseline_done_24"
+                app:backgroundTint="#EFE4B1"
+                app:rippleColor="@null" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/paint_environment_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:contentDescription="Paint environment"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_baseline_format_paint_24"
+                app:backgroundTint="#EFE4B1"
+                app:rippleColor="@null" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/privacy_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/privacy_label"
+            android:textAlignment="center"
+            android:textColor="#4D000000" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/turn_pincode_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_baseline_question_mark_24"
+                app:backgroundTint="#EFE4B1"
+                app:rippleColor="@null" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_baseline_question_mark_24"
+                app:backgroundTint="#EFE4B1"
+                app:rippleColor="@null" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_baseline_question_mark_24"
+                app:backgroundTint="#EFE4B1"
+                app:rippleColor="@null" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/features_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/features_label"
+            android:textAlignment="center"
+            android:textColor="#4D000000" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/change_base_color_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:contentDescription="Change base note color"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_baseline_color_lens_24"
+                app:backgroundTint="#EFE4B1"
+                app:rippleColor="@null" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/change_base_font_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:contentDescription="Change base note font"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_baseline_font_download_24"
+                app:backgroundTint="#EFE4B1"
+                app:rippleColor="@null" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/remove_ad_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:contentDescription="Remove ad"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_baseline_money_off_24"
+                app:backgroundTint="#EFE4B1"
+                app:rippleColor="@null" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

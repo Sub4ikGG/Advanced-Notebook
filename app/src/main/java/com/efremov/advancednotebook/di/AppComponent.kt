@@ -2,7 +2,9 @@ package com.efremov.advancednotebook.di
 
 import com.efremov.advancednotebook.fragments.CreateNoteFragment
 import com.efremov.advancednotebook.MainActivity
+import com.efremov.advancednotebook.fragments.EditNoteBottomSheetFragment
 import com.efremov.advancednotebook.fragments.MainFragment
+import com.efremov.advancednotebook.fragments.SettingsFragment
 import com.efremov.advancednotebook.recyclerview.MainAdapter
 import com.efremov.advancednotebook.viewmodel.MainViewModel
 import dagger.Component
@@ -14,4 +16,6 @@ interface AppComponent {
     fun inject(createNoteFragment: CreateNoteFragment)
     fun inject(mainViewModel: MainViewModel)
     fun inject(adapter: MainAdapter)
+    fun inject(settingsFragment: SettingsFragment)
+    fun inject(editNoteBottomSheetFragment: EditNoteBottomSheetFragment)
 }

@@ -1,7 +1,6 @@
 package com.efremov.advancednotebook
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.navigation.findNavController
@@ -11,10 +10,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.efremov.advancednotebook.databinding.ActivityMainBinding
-import com.efremov.advancednotebook.di.App
-import com.efremov.advancednotebook.di.DaggerAppComponent
-import com.efremov.advancednotebook.room.NoteRepository
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,7 +38,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_toSettings)
+                true
+            }
+            R.id.action_help -> {
+                //findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_toHelp)
+                true
+            }
+            R.id.action_about -> {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_toAbout)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

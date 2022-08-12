@@ -1,5 +1,7 @@
 package com.efremov.advancednotebook.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.efremov.advancednotebook.R
@@ -17,6 +20,7 @@ import com.efremov.advancednotebook.data.Note
 import com.efremov.advancednotebook.databinding.FragmentMainBinding
 import com.efremov.advancednotebook.di.App
 import com.efremov.advancednotebook.recyclerview.MainAdapter
+import com.efremov.advancednotebook.showSnackbarMessage
 import com.efremov.advancednotebook.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
@@ -31,6 +36,9 @@ const val EDIT_NOTE_ARG = "edit_note_arg"
 
 class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
     EditNoteBottomSheetFragment.OnFabEventListener {
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     private var _binding: FragmentMainBinding? = null
     private var adapter = MainAdapter(this)
@@ -72,8 +80,11 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (requireActivity().applicationContext as App).appComponent.inject(mainViewModel)
-        (requireActivity().applicationContext as App).appComponent.inject(adapter)
+        (requireActivity().applicationContext as App).appComponent.apply {
+            inject(mainViewModel)
+            inject(adapter)
+            inject(this@MainFragment)
+        }
     }
 
     override fun onCreateView(
@@ -90,7 +101,11 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
     }
 
     private fun setupRecyclerView() {
-        binding.notesRcView.layoutManager = GridLayoutManager(context, 2)
+        val layoutManager = if (sharedPreferences.getString(LAYOUT_ARG, "grid") == "grid")
+            GridLayoutManager(context, 2)
+            else LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        binding.notesRcView.layoutManager = layoutManager
         binding.notesRcView.adapter = adapter
 
         mIth.attachToRecyclerView(binding.notesRcView)
@@ -102,7 +117,7 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
         }
         mainViewModel.allData.observe(viewLifecycleOwner) { list ->
             Log.d("Bug", "Received list = $list")
-            if(list.size != adapter.getItems().size)
+            if (list.size != adapter.getItems().size)
                 adapter.put(list as ArrayList<Note>)
         }
     }
@@ -140,7 +155,7 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
         adapter.changeItem(note)
         CoroutineScope(Dispatchers.IO).launch { mainViewModel.updateNote(note) }
 
-        showMessage("Note '${note.title}' successfully saved.")
+        showSnackbarMessage(requireView(), "Note '${note.title}' successfully saved.")
     }
 
     override fun onNoteDeleted(note: Note) {
@@ -152,11 +167,6 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
             mainViewModel.deleteNote(note)
         }
 
-        showMessage("Note '${note.title}' deleted.")
-    }
-
-    private fun showMessage(message: String) {
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT)
-            .setAction("Action", null).show()
+        showSnackbarMessage(requireView(),"Note '${note.title}' deleted.")
     }
 }

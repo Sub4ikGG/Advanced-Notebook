@@ -6,23 +6,10 @@
     app:startDestination="@id/mainFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.efremov.advancednotebook.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first"/>
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.efremov.advancednotebook.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second"/>
-    <fragment
         android:id="@+id/mainFragment"
         android:name="com.efremov.advancednotebook.fragments.MainFragment"
         android:label="Notebook"
         tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_mainFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
         <action
             android:id="@+id/action_mainFragment_to_createNoteFragment"
             app:destination="@id/createNoteFragment"
@@ -30,10 +17,41 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_toSettings"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_toAbout"
+            app:destination="@id/aboutAppFragment" />
     </fragment>
     <fragment
         android:id="@+id/createNoteFragment"
         android:name="com.efremov.advancednotebook.fragments.CreateNoteFragment"
-        android:label="Create note"
-        tools:layout="@layout/fragment_create_note" />
+        android:label="@string/create_new_note_label"
+        tools:layout="@layout/fragment_create_note">
+        <action
+            android:id="@+id/action_toSettings"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_toAbout"
+            app:destination="@id/aboutAppFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.efremov.advancednotebook.fragments.SettingsFragment"
+        android:label="@string/settings_label"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_toAbout"
+            app:destination="@id/aboutAppFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutAppFragment"
+        android:name="com.efremov.advancednotebook.fragments.AboutAppFragment"
+        android:label="@string/about_app"
+        tools:layout="@layout/fragment_about_app">
+        <action
+            android:id="@+id/action_toSettings"
+            app:destination="@id/settingsFragment" />
+    </fragment>
 </navigation>
