@@ -16,20 +16,22 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+class MainAdapter(var onNoteClickListener: OnNoteClickListener) :
+    RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
     @Inject
     lateinit var context: Context
 
     private var notes = ArrayList<Note>()
 
-    inner class MainViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnLongClickListener, View.OnClickListener {
+    inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnLongClickListener, View.OnClickListener {
         private val binding = TextNoteLayoutBinding.bind(view)
 
         fun bind(note: Note, context: Context) {
             binding.titleNote.text = note.title
             binding.textNote.text = note.text
 
-            when(note.time) {
+            when (note.time) {
                 "0" -> binding.timeNote.text = ""
                 "-1" -> binding.timeNote.visibility = View.GONE
                 else -> binding.timeNote.text = note.time
@@ -65,7 +67,8 @@ class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Ad
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.text_note_layout, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.text_note_layout, parent, false)
         return MainViewHolder(view)
     }
 
@@ -85,8 +88,8 @@ class MainAdapter(var onNoteClickListener: OnNoteClickListener): RecyclerView.Ad
     }
 
     fun changeItem(note: Note) {
-        for(i in 0 until itemCount) {
-            if(notes[i].id == note.id) {
+        for (i in 0 until itemCount) {
+            if (notes[i].id == note.id) {
                 notes[i] = note
                 notifyItemChanged(i)
                 break

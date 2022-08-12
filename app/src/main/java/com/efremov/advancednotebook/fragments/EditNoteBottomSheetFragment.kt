@@ -88,7 +88,7 @@ class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener) :
 
         binding.deleteFab.setOnClickListener {
             binding.deleteFab.press {
-                if(sharedPreferences.getBoolean(CONFIRM_ARG, false))
+                if (sharedPreferences.getBoolean(CONFIRM_ARG, false))
                     showAlertDialog(
                         requireContext(),
                         "Delete note",
@@ -147,7 +147,7 @@ class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener) :
             }
         }
 
-        var scaled = false
+        /*var scaled = false
         binding.topBarNote.setOnClickListener {
             if (!scaled)
                 binding.noteCardView.animate().apply {
@@ -162,7 +162,7 @@ class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener) :
                     scaleY(1f)
                 }
             scaled = !scaled
-        }
+        }*/
     }
 
     private fun View.press(qux: () -> Unit) {
