@@ -1,11 +1,9 @@
 package com.efremov.advancednotebook.fragments
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +16,6 @@ import com.efremov.advancednotebook.data.noteFonts
 import com.efremov.advancednotebook.databinding.FragmentSettingsBinding
 import com.efremov.advancednotebook.di.App
 import com.efremov.advancednotebook.showSnackbarMessage
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_settings.*
 import javax.inject.Inject
 
 const val STORAGE_NAME = "settings"
@@ -212,6 +208,11 @@ class SettingsFragment : Fragment() {
 
             changeBaseFontFab.setOnLongClickListener {
                 showSnackbarMessage(requireView(), "Change base font of your note")
+                true
+            }
+
+            removeAdFab.setOnLongClickListener {
+                showSnackbarMessage(requireView(), "Soon")
                 true
             }
         }
