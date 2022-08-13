@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D9D7D7"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/question_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/q_what_is_it"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/selector_question_answer"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/selection_button"
+            android:src="@drawable/ic_baseline_keyboard_arrow_up_24" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/answer_textView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#EDEBEB"
+        android:padding="16dp"
+        android:text="@string/lorem_ipsum_1"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif-light"
+        />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

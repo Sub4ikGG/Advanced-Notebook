@@ -47,12 +47,12 @@ class MainActivity : AppCompatActivity() {
                 findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_toSettings)
                 true
             }
-            R.id.action_help -> {
-                //findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_toHelp)
-                true
-            }
             R.id.action_about -> {
                 findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_toAbout)
+                true
+            }
+            R.id.action_help -> {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_toHelp)
                 true
             }
             else -> super.onOptionsItemSelected(item)
