@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.TimePicker
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -360,6 +361,9 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                 translationX(1f)
             }
         }
+
+        Toast.makeText(requireContext(), "Soon reminder feature will be able", Toast.LENGTH_SHORT)
+            .show()
     }
 
     companion object {
