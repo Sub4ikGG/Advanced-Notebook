@@ -61,4 +61,5 @@
     <string name="general_label">General</string>
     <string name="features_label">Features</string>
     <string name="long_click_on_button_to_show_what_is_it">Long click on button to show what is it</string>
+    <string name="about_main_text">A lightweight application for creating and viewing your notes. Color the note however you like. The application was developed for the portfolio of android developer Efremov Kirill.</string>
 </resources>
