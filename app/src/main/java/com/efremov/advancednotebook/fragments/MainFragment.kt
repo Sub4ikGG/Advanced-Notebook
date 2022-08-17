@@ -44,7 +44,7 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
 
     private val binding get() = _binding!!
 
-    private var mIth = ItemTouchHelper(
+    /*private var mIth = ItemTouchHelper(
         object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
             0
@@ -73,7 +73,7 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
             override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
                 // remove from adapter
             }
-        })
+        })*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +106,7 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
         binding.notesRcView.layoutManager = layoutManager
         binding.notesRcView.adapter = adapter
 
-        mIth.attachToRecyclerView(binding.notesRcView)
+        /*mIth.attachToRecyclerView(binding.notesRcView)*/
     }
 
     private fun setupViewModel() {
