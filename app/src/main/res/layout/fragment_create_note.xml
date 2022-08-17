@@ -189,7 +189,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true">
@@ -218,7 +218,7 @@
                     android:fontFamily="sans-serif"
                     android:text="Reminder:\n- I will remind you of this note at 20:11 on 07/26/2022"
                     android:textColor="#393838"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
