@@ -15,7 +15,7 @@ import com.efremov.advancednotebook.data.noteColors
 import com.efremov.advancednotebook.data.noteFonts
 import com.efremov.advancednotebook.databinding.FragmentSettingsBinding
 import com.efremov.advancednotebook.di.App
-import com.efremov.advancednotebook.showSnackbarMessage
+import com.efremov.advancednotebook.showToastMessage
 import javax.inject.Inject
 
 const val STORAGE_NAME = "settings"
@@ -97,7 +97,7 @@ class SettingsFragment : Fragment() {
 
                     changeNoteLayoutFab.backgroundTintList =
                         ColorStateList.valueOf(if (settings.layout == "grid") colorOn else colorOf)
-                    showSnackbarMessage(requireView(), "Now 'Layout' is ${settings.layout}")
+                    showToastMessage(requireView(), "Now 'Layout' is ${settings.layout}")
                 }
             }
 
@@ -111,7 +111,7 @@ class SettingsFragment : Fragment() {
 
                     turnConfirmFab.backgroundTintList =
                         ColorStateList.valueOf(if (settings.confirm) colorOn else colorOf)
-                    showSnackbarMessage(
+                    showToastMessage(
                         requireView(),
                         "Now 'Action Confirm' is ${if (settings.confirm) "on" else "off"}"
                     )
@@ -128,7 +128,7 @@ class SettingsFragment : Fragment() {
 
                     paintEnvironmentFab.backgroundTintList =
                         ColorStateList.valueOf(if (settings.paintEnvironment) colorOn else colorOf)
-                    showSnackbarMessage(
+                    showToastMessage(
                         requireView(),
                         "Now 'Paint Environment' is ${if (settings.paintEnvironment) "on" else "off"}"
                     )
@@ -152,7 +152,7 @@ class SettingsFragment : Fragment() {
                         apply()
                     }
 
-                    showSnackbarMessage(requireView(), "Base color is changed")
+                    showToastMessage(requireView(), "Base color is changed")
                 }
             }
 
@@ -172,7 +172,7 @@ class SettingsFragment : Fragment() {
                         apply()
                     }
 
-                    showSnackbarMessage(
+                    showToastMessage(
                         requireView(),
                         "Now your base font is '${settings.baseFont}'"
                     )
@@ -184,17 +184,17 @@ class SettingsFragment : Fragment() {
     private fun setupOnLongClickListeners() {
         binding.apply {
             changeNoteLayoutFab.setOnLongClickListener {
-                showSnackbarMessage(requireView(), "Another display of notes")
+                showToastMessage(requireView(), "Another display of notes")
                 true
             }
 
             turnConfirmFab.setOnLongClickListener {
-                showSnackbarMessage(requireView(), "Turn on/of action confirmation ")
+                showToastMessage(requireView(), "Turn on/of action confirmation ")
                 true
             }
 
             paintEnvironmentFab.setOnLongClickListener {
-                showSnackbarMessage(
+                showToastMessage(
                     requireView(),
                     "Paint your environment when you select features"
                 )
@@ -202,17 +202,17 @@ class SettingsFragment : Fragment() {
             }
 
             changeBaseColorFab.setOnLongClickListener {
-                showSnackbarMessage(requireView(), "Change base color of your note")
+                showToastMessage(requireView(), "Change base color of your note")
                 true
             }
 
             changeBaseFontFab.setOnLongClickListener {
-                showSnackbarMessage(requireView(), "Change base font of your note")
+                showToastMessage(requireView(), "Change base font of your note")
                 true
             }
 
             removeAdFab.setOnLongClickListener {
-                showSnackbarMessage(requireView(), "Soon")
+                showToastMessage(requireView(), "Soon")
                 true
             }
         }

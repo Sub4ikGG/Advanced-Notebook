@@ -1,6 +1,5 @@
 package com.efremov.advancednotebook.fragments
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -20,14 +19,13 @@ import com.efremov.advancednotebook.data.Note
 import com.efremov.advancednotebook.databinding.FragmentMainBinding
 import com.efremov.advancednotebook.di.App
 import com.efremov.advancednotebook.recyclerview.MainAdapter
-import com.efremov.advancednotebook.showSnackbarMessage
+import com.efremov.advancednotebook.showToastMessage
 import com.efremov.advancednotebook.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -155,7 +153,7 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
         adapter.changeItem(note)
         CoroutineScope(Dispatchers.IO).launch { mainViewModel.updateNote(note) }
 
-        showSnackbarMessage(requireView(), "Note '${note.title}' successfully saved.")
+        showToastMessage(requireView(), "Note '${note.title}' successfully saved.")
     }
 
     override fun onNoteDeleted(note: Note) {
@@ -167,6 +165,6 @@ class MainFragment : Fragment(), MainAdapter.OnNoteClickListener,
             mainViewModel.deleteNote(note)
         }
 
-        showSnackbarMessage(requireView(),"Note '${note.title}' deleted.")
+        showToastMessage(requireView(),"Note '${note.title}' deleted.")
     }
 }

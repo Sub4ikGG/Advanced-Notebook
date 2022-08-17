@@ -36,7 +36,6 @@ fun showAlertDialog(
     builder.show()
 }
 
-fun showSnackbarMessage(view: View, message: String) {
-    Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
-        .setAction("Action", null).show()
+fun showToastMessage(view: View, message: String) {
+    Toast.makeText(view.context, message, Toast.LENGTH_SHORT).show()
 }

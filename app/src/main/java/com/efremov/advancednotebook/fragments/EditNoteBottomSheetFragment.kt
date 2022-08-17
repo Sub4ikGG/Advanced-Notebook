@@ -14,7 +14,7 @@ import com.efremov.advancednotebook.data.Note
 import com.efremov.advancednotebook.databinding.EditNoteBottomSheetBinding
 import com.efremov.advancednotebook.di.App
 import com.efremov.advancednotebook.showAlertDialog
-import com.efremov.advancednotebook.showSnackbarMessage
+import com.efremov.advancednotebook.showToastMessage
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import javax.inject.Inject
 
@@ -109,7 +109,7 @@ class EditNoteBottomSheetFragment(var onFabEventListener: OnFabEventListener) :
 
         binding.setReminderFab.setOnClickListener {
             binding.setReminderFab.press {
-                showSnackbarMessage(requireView(), "Soon it will be able..")
+                showToastMessage(requireView(), "Soon it will be able..")
                 /*val calendar = Calendar.getInstance()
                 DatePickerDialog(
                     requireContext(),

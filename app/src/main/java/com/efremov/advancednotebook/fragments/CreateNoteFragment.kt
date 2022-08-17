@@ -2,7 +2,6 @@ package com.efremov.advancednotebook.fragments
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
@@ -27,7 +26,7 @@ import com.efremov.advancednotebook.data.noteFonts
 import com.efremov.advancednotebook.databinding.FragmentCreateNoteBinding
 import com.efremov.advancednotebook.di.App
 import com.efremov.advancednotebook.room.NoteRepository
-import com.efremov.advancednotebook.showSnackbarMessage
+import com.efremov.advancednotebook.showToastMessage
 import com.efremov.advancednotebook.viewpager2.ColorAdapter
 import com.efremov.advancednotebook.viewpager2.FontAdapter
 import com.google.android.material.snackbar.Snackbar
@@ -79,6 +78,20 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        val baseColor = sharedPreferences.getInt(BASE_COLOR_ARG, R.color.default_note_color)
+        val baseFont = sharedPreferences.getString(BASE_FONT_ARG, "sans-serif")
+
+        val colorIndex = noteColors.indexOf(baseColor)
+        val fontIndex = noteFonts.indexOf(baseFont)
+        colorViewPager.postDelayed(Runnable {
+            colorViewPager.currentItem = colorIndex
+            fontViewPager.currentItem = fontIndex
+        }, 100)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -91,12 +104,6 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
         colorViewPager = binding.topColorViewPager; fontViewPager = binding.fontViewPager
         colorViewPager.adapter = colorAdapter; fontViewPager.adapter = fontAdapter
-
-        val baseColor = sharedPreferences.getInt(BASE_COLOR_ARG, R.color.default_note_color)
-        val baseFont = sharedPreferences.getString(BASE_FONT_ARG, "sans-serif")
-
-        colorViewPager.currentItem = noteColors.indexOf(baseColor)
-        fontViewPager.currentItem = noteFonts.indexOf(baseFont)
 
         scope.launch {
             while (!this@CreateNoteFragment.isVisible) delay(500)
@@ -147,11 +154,11 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     private fun setupClickListeners() {
         binding.createFab.setOnClickListener {
             binding.createFab.press {
-                if (binding.titleNote.text.isEmpty()) showSnackbarMessage(
+                if (binding.titleNote.text.isEmpty()) showToastMessage(
                     requireView(),
                     "Error: note title is empty."
                 )
-                else if (binding.textNote.text.isEmpty()) showSnackbarMessage(
+                else if (binding.textNote.text.isEmpty()) showToastMessage(
                     requireView(),
                     "Error: note content is empty."
                 )
@@ -166,11 +173,11 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
                     try {
                         scope.launch { repository.insertNote(note) }
-                        showSnackbarMessage(requireView(), "Successfully create note.")
+                        showToastMessage(requireView(), "Successfully create note.")
                         findNavController().popBackStack()
                     } catch (e: Exception) {
                         Log.d("Try-catch tracker", "${e.message}")
-                        showSnackbarMessage(requireView(), "Error: can`t create note.")
+                        showToastMessage(requireView(), "Error: can`t create note.")
                     }
 
                 }
@@ -218,11 +225,11 @@ class CreateNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
         binding.shareNoteFab.setOnClickListener {
             binding.shareNoteFab.press {
-                if (binding.titleNote.text.isEmpty()) showSnackbarMessage(
+                if (binding.titleNote.text.isEmpty()) showToastMessage(
                     requireView(),
                     "Error: note title is empty."
                 )
-                else if (binding.textNote.text.isEmpty()) showSnackbarMessage(
+                else if (binding.textNote.text.isEmpty()) showToastMessage(
                     requireView(),
                     "Error: note content is empty."
                 )
