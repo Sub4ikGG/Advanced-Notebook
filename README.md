@@ -16,4 +16,4 @@ https://user-images.githubusercontent.com/98654420/185102961-701e8916-e75b-4352-
 # Tech
 P. Language: Kotlin  
 UI: XML  
-Other: DI (Dagger), MVVM (ViewModel, LiveData), Room (SQLite), ViewPager2, One-Activity, Navigation
+Other: DI (Dagger), MVVM (ViewModel, LiveData), Room (SQLite), ViewPager2, One-Activity, Navigation, Coroutines
