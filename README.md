@@ -1,4 +1,5 @@
 # Advanced Notebook 
+Light notebook for Android
 ![advancednotebook](https://user-images.githubusercontent.com/98654420/185106061-32f4966e-60b1-423b-a7b1-540fe18b8711.png)  
 A lightweight application for creating and viewing your notes. Color the note however you like. The application was developed for the portfolio of android developer Efremov Kirill.
 # App Preview
